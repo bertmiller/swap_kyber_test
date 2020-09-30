@@ -22,8 +22,7 @@ contract SwapKyber {
 
   function getexpectedrate(uint ethAmount) public view returns (uint256) {
     uint256 expectedRate = kyberProxy.getExpectedRateAfterFee(eth_token, dai_token, ethAmount, 25, '');
-    /* uint256 expectedRate = kyberProxy.getExpectedRateAfterFee(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e, 0x6B175474E89094C44Da98b954EedeAC495271d0F, 10000, 25, 0); */
-    /* (uint256 expectedRate, ) = kyberProxy.getExpectedRate(yfi_token, dai_token, 1000000); */
+
     return expectedRate;
   }
 
