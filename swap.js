@@ -11,7 +11,7 @@ const { address: admin } = web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY)
 
 console.log(`Current account: ${admin}`);
 
-// const AMOUNT_DAI = (100).toString();
+const AMOUNT_ETH = (1000000000000000000).toString();
 
 const init = async() => {
   const networkId = await web3.eth.net.getId();
@@ -24,11 +24,26 @@ const init = async() => {
 
   console.log(`Smart contract address: ${smart_contract_address}`);
 
-  // const tx1 = await
-  swapkyber.methods.callfunc().call({from: admin}, function (error, result){
-    console.log(error);
-    console.log(result);
-  });
+  const tx1 = await swapkyber.methods.tradetest(AMOUNT_ETH);
+
+  const gasCost_tx1 = await tx1.estimateGas({from: admin});
+  const gasPrice = await web3.eth.getGasPrice();
+
+  const data = tx1.encodeABI()
+
+  const txData = {
+    from: admin,
+    to: swaptokens.options.address,
+    data: data,
+    gas: gasCost_tx1,
+    gasPrice: gasPrice,
+    value: AMOUNT_ETH
+  }
+
+  const receipt = await web3.eth.sendTransaction(txData);
+
+  console.log(`Transaction hash: ${receipt.transactionHash}`);
+  
 }
 
 init();
